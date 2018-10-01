@@ -1,0 +1,2 @@
+# E-Hive
+E-Hive c’est la solution connecté permettant de récupérer des informations sur la santé de la ruche jour après jour pour en voir l’évolution continue d’une ruche. On y trouve le poids en miel contenu dans la ruche ainsi que la population totale de cette dernière. Grâce aux mesures faites quotidiennement il est possible de mettre en place des corrélations avec la température ou d’autre facteur externe à la ruche.
