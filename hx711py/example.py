@@ -51,7 +51,7 @@ import urllib.request
 import json
 import datetime
 
-myurl = "http://polyruche.miaounyan.eu/sensor"
+myurl = "http://raspberrymiaou.local:1880/sensors"
 
 def sendValue(val, sid):
     body = {'type': 'Weight', 'sensorId': sid, 'value': val, 'date': datetime.datetime.now().isoformat()}

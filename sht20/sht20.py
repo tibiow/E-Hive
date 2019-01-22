@@ -1,21 +1,10 @@
-#!/usr/bin/python
-#---------------------------------------------------------------------
-#    ___  ___  _ ____
-#   / _ \/ _ \(_) __/__  __ __
-#  / , _/ ___/ /\ \/ _ \/ // /
-# /_/|_/_/  /_/___/ .__/\_, /
-#                /_/   /___/
-#
-#           bh1750.py
-# Read data from a BH1750 digital light sensor.
-#
-# Author : Matt Hawkins
-# Date   : 26/06/2018
-#
-# For more information please visit :
-# https://www.raspberrypi-spy.co.uk/?s=bh1750
-#
-#---------------------------------------------------------------------
+import smbus
+import time
+import urllib.request
+import json
+import datetime
+from sensor.SHT20 import SHT20
+
 import smbus
 import time
 
@@ -46,34 +35,20 @@ ONE_TIME_LOW_RES_MODE = 0x23
 #bus = smbus.SMBus(0) # Rev 1 Pi uses 0
 bus = smbus.SMBus(1)  # Rev 2 Pi uses 1
 
-
-
-import urllib.request
-import json
-import datetime
-
-
 myurl = "http://raspberrymiaou.local:1880/sensors"
 
-def convertToNumber(data):
-  # Simple function to convert 2 bytes of data
-  # into a decimal number. Optional parameter 'decimals'
-  # will round to specified number of decimal places.
-  result=(data[1] + (256 * data[0])) / 1.2
-  return (result)
-
-def readLight(addr=DEVICE):
-  # Read data from I2C interface
-  data = bus.read_i2c_block_data(addr,ONE_TIME_HIGH_RES_MODE_1)
-  return convertToNumber(data)
+def readTemperature(addr=DEVICE):
+  sht = SHT20(0, 0x40)
+  t = sht.temperature()
+  return t
 
 def main():
 
   while True:
-    lightLevel=readLight()
-    print("Light Level : " + format(lightLevel,'.2f') + " lx")
+    temperatureLevel=readTemperature()
+    print("Temperature : " + format(temperatureLevel) + " lx")
 
-    body = {'type': 'Light', 'sensorId': 1, 'value': lightLevel, 'date': datetime.datetime.now().isoformat()}
+    body = {'type': 'Temperature', 'sensorId': 1, 'value': temperatureLevel, 'date': datetime.datetime.now().isoformat()}
 
     req = urllib.request.Request(myurl)
     req.add_header('Content-Type', 'application/json; charset=utf-8')
