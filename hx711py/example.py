@@ -12,6 +12,7 @@ def cleanAndExit():
 hx1 = HX711(5, 26)
 hx2 = HX711(6, 26)
 hx3 = HX711(13, 26)
+hx4 = HX711(19, 26)
 
 # I've found out that, for some reason, the order of the bytes is not always the same between versions of python, numpy and the hx711 itself.
 # Still need to figure out why does it change.
@@ -23,6 +24,7 @@ hx3 = HX711(13, 26)
 hx1.set_reading_format("LSB", "MSB")
 hx2.set_reading_format("LSB", "MSB")
 hx3.set_reading_format("LSB", "MSB")
+hx4.set_reading_format("LSB", "MSB")
 
 # HOW TO CALCULATE THE REFFERENCE UNIT
 # To set the reference unit to 1. Put 1kg on your sensor or anything you have and know exactly how much it weights.
@@ -46,6 +48,12 @@ hx3.set_reference_unit(92)
 
 hx3.reset()
 hx3.tare()
+
+hx4.set_reference_unit(92)
+
+hx4.reset()
+hx4.tare()
+
 
 import urllib.request
 import json
@@ -78,15 +86,17 @@ while True:
         val1 = hx1.get_weight(5)
         val2 = hx2.get_weight(5)
         val3 = hx3.get_weight(5)
+        val4 = hx4.get_weight(5)
         print(val1)
         print(val2)
         print(val3)
+        print(val4)
         print("--------")
 
         sendValue(val1, 1)
         sendValue(val2, 2)
         sendValue(val3, 3)
-
+        sendValue(val4, 4)
 
         hx1.power_down()
         hx1.power_up()
@@ -94,6 +104,8 @@ while True:
         hx2.power_up()
         hx3.power_down()
         hx3.power_up()
+        hx4.power_down()
+        hx4.power_up()
 
         time.sleep(10)
     except (KeyboardInterrupt, SystemExit):
