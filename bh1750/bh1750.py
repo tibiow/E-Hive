@@ -21,8 +21,6 @@ import time
 
 # Define some constants from the datasheet
 
-DEVICE     = 0x23 # Default device I2C address
-
 POWER_DOWN = 0x00 # No active state
 POWER_ON   = 0x01 # Power on
 RESET      = 0x07 # Reset data register value
@@ -43,8 +41,8 @@ ONE_TIME_HIGH_RES_MODE_2 = 0x21
 # Device is automatically set to Power Down after measurement.
 ONE_TIME_LOW_RES_MODE = 0x23
 
-#bus = smbus.SMBus(0) # Rev 1 Pi uses 0
-bus = smbus.SMBus(1)  # Rev 2 Pi uses 1
+bus0 = smbus.SMBus(0) # Rev 1 Pi uses 0
+bus1 = smbus.SMBus(1)  # Rev 2 Pi uses 1
 
 
 
@@ -62,27 +60,32 @@ def convertToNumber(data):
   result=(data[1] + (256 * data[0])) / 1.2
   return (result)
 
-def readLight(addr=DEVICE):
+def readLight(bus, addr):
   # Read data from I2C interface
   data = bus.read_i2c_block_data(addr,ONE_TIME_HIGH_RES_MODE_1)
   return convertToNumber(data)
 
+def sendLight(bus, addr, sensorId):
+  lightLevel=readLight(bus, addr)
+  print("Light Level" + str(sensorId) + " : " + format(lightLevel,'.2f') + " lx")
+
+  body = {'type': 'Light', 'sensorId': sensorId, 'value': lightLevel, 'date': datetime.datetime.now().isoformat()}
+
+  req = urllib.request.Request(myurl)
+  req.add_header('Content-Type', 'application/json; charset=utf-8')
+
+  jsondata = json.dumps(body)
+  jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
+  req.add_header('Content-Length', len(jsondataasbytes))
+  response = urllib.request.urlopen(req, jsondataasbytes)
+
 def main():
 
   while True:
-    lightLevel=readLight()
-    print("Light Level : " + format(lightLevel,'.2f') + " lx")
-
-    body = {'type': 'Light', 'sensorId': 1, 'value': lightLevel, 'date': datetime.datetime.now().isoformat()}
-
-    req = urllib.request.Request(myurl)
-    req.add_header('Content-Type', 'application/json; charset=utf-8')
-
-    jsondata = json.dumps(body)
-    jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
-    req.add_header('Content-Length', len(jsondataasbytes))
-    response = urllib.request.urlopen(req, jsondataasbytes)
-
+    sendLight(bus0, 0x23, 0)
+    sendLight(bus0, 0x5c, 1)
+    sendLight(bus1, 0x23, 2)
+    sendLight(bus1, 0x5c, 3)
     time.sleep(10)
 
 if __name__=="__main__":
