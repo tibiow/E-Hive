@@ -59,7 +59,7 @@ import urllib.request
 import json
 import datetime
 
-myurl = "http://raspberrymiaou.local:1880/sensors"
+myurl = "http://nodered:1880/sensors"
 
 def sendValue(val, sid):
     body = {'type': 'Weight', 'sensorId': sid, 'value': val, 'date': datetime.datetime.now().isoformat()}
@@ -81,7 +81,7 @@ while True:
         #np_arr8_string = hx.get_np_arr8_string()
         #binary_string = hx.get_binary_string()
         #print binary_string + " " + np_arr8_string
-        
+
         # Prints the weight. Comment if you're debbuging the MSB and LSB issue.
         val1 = hx1.get_weight(5)
         val2 = hx2.get_weight(5)

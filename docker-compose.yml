@@ -1,0 +1,25 @@
+version: "3"
+services:
+  nodered:
+    image: e-hive-nodered
+    restart: always
+    ports:
+      - "1880:1880"
+    build:
+      context: nodered
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/data
+      - /dev:/dev
+    privileged: true
+  sensors:
+    image: e-hive-sensors
+    restart: always
+    build:
+      context: sensors
+      dockerfile: Dockerfile
+    volumes:
+      - /dev:/dev
+    links:
+      - nodered
+    privileged: true
