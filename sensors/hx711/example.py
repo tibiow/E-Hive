@@ -93,10 +93,10 @@ while True:
         print(val4)
         print("--------")
 
-        sendValue(val1, 1)
-        sendValue(val2, 2)
-        sendValue(val3, 3)
-        sendValue(val4, 4)
+        sendValue(val1, 0)
+        sendValue(val2, 1)
+        sendValue(val3, 2)
+        sendValue(val4, 3)
 
         hx1.power_down()
         hx1.power_up()
