@@ -1,7 +1,7 @@
 version: "2"
 services:
-  nodered:
-    image: e-hive-nodered
+  nodered-gateway:
+    image: e-hive-nodered-gateway
     restart: always
     ports:
       - "1880:1880"
@@ -9,24 +9,13 @@ services:
       context: nodered
       dockerfile: Dockerfile
     volumes:
-      - ./data:/data
+      - ./data-gateway:/data
       - /dev:/dev
     privileged: true
-  sensors:
-    image: e-hive-sensors
-    restart: always
-    build:
-      context: sensors
-      dockerfile: Dockerfile
-    volumes:
-      - /dev:/dev
-    links:
-      - nodered
-    privileged: true
-  nodered2:
+  nodered-application:
     image: nodered/node-red-docker:rpi-v8
     restart: always
     ports:
       - "1881:1880"
     volumes:
-      - ./data2:/data2
+      - ./data-application:/data

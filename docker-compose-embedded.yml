@@ -1,0 +1,25 @@
+version: "2"
+services:
+  nodered-embedded:
+    image: e-hive-nodered-embedded
+    restart: always
+    ports:
+      - "1880:1880"
+    build:
+      context: nodered
+      dockerfile: Dockerfile
+    volumes:
+      - ./data-embedded:/data
+      - /dev:/dev
+    privileged: true
+  sensors:
+    image: e-hive-sensors
+    restart: always
+    build:
+      context: sensors
+      dockerfile: Dockerfile
+    volumes:
+      - /dev:/dev
+    links:
+      - nodered
+    privileged: true
