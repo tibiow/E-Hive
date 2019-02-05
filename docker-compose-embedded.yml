@@ -21,5 +21,5 @@ services:
     volumes:
       - /dev:/dev
     links:
-      - nodered
+      - nodered-embedded
     privileged: true
