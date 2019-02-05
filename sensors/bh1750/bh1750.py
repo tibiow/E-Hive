@@ -51,7 +51,7 @@ import json
 import datetime
 
 
-myurl = "http://nodered:1880/sensors"
+myurl = "http://nodered-embedded:1880/sensors"
 
 def convertToNumber(data):
   # Simple function to convert 2 bytes of data

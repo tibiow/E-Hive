@@ -8,7 +8,7 @@ from sensor.SHT20 import SHT20
 import smbus
 import time
 
-myurl = "http://nodered:1880/sensors"
+myurl = "http://nodered-embedded:1880/sensors"
 
 def readTemperature(bus):
   sht = SHT20(bus, 0x40)
